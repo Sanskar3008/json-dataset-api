@@ -1,0 +1,232 @@
+{
+  "info": {
+    "_postman_id": "6a069283-e547-40fe-b20b-4bcbc6e6ac00",
+    "name": "JSON Dataset API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38661859"
+  },
+  "item": [
+    {
+      "name": "Insert a JSON record",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Amit\",\"age\":25,\"department\":\"Engineering\",\"salary\":50000}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://json-dataset-api-somw.onrender.com/api/dataset/employees/record",
+          "protocol": "https",
+          "host": [
+            "json-dataset-api-somw",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "dataset",
+            "employees",
+            "record"
+          ]
+        },
+        "description": "Generated from cURL: curl -X POST \"https://json-dataset-api-somw.onrender.com/api/dataset/employees/record\" \\\n-H \"Content-Type: application/json\" \\\n-d \"{\\\"name\\\":\\\"Amit\\\",\\\"age\\\":25,\\\"department\\\":\\\"Engineering\\\",\\\"salary\\\":50000}\""
+      },
+      "response": []
+    },
+    {
+      "name": "Retrieve all records",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://json-dataset-api-somw.onrender.com/api/dataset/employees/query",
+          "protocol": "https",
+          "host": [
+            "json-dataset-api-somw",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "dataset",
+            "employees",
+            "query"
+          ]
+        },
+        "description": "Generated from cURL: curl -X GET \"https://json-dataset-api-somw.onrender.com/api/dataset/employees/query\""
+      },
+      "response": []
+    },
+    {
+      "name": "Group records by department",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://json-dataset-api-somw.onrender.com/api/dataset/employees/query?groupBy=department",
+          "protocol": "https",
+          "host": [
+            "json-dataset-api-somw",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "dataset",
+            "employees",
+            "query"
+          ],
+          "query": [
+            {
+              "key": "groupBy",
+              "value": "department"
+            }
+          ]
+        },
+        "description": "Generated from cURL: curl -X GET \"https://json-dataset-api-somw.onrender.com/api/dataset/employees/query?groupBy=department\""
+      },
+      "response": []
+    },
+    {
+      "name": "Sort records (ascending)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://json-dataset-api-somw.onrender.com/api/dataset/employees/query?sortBy=age&order=asc",
+          "protocol": "https",
+          "host": [
+            "json-dataset-api-somw",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "dataset",
+            "employees",
+            "query"
+          ],
+          "query": [
+            {
+              "key": "sortBy",
+              "value": "age"
+            },
+            {
+              "key": "order",
+              "value": "asc"
+            }
+          ]
+        },
+        "description": "Generated from cURL: curl -X GET \"https://json-dataset-api-somw.onrender.com/api/dataset/employees/query?sortBy=age&order=asc\""
+      },
+      "response": []
+    },
+    {
+      "name": "Sort records (descending)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://json-dataset-api-somw.onrender.com/api/dataset/employees/query?sortBy=salary&order=desc",
+          "protocol": "https",
+          "host": [
+            "json-dataset-api-somw",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "dataset",
+            "employees",
+            "query"
+          ],
+          "query": [
+            {
+              "key": "sortBy",
+              "value": "salary"
+            },
+            {
+              "key": "order",
+              "value": "desc"
+            }
+          ]
+        },
+        "description": "Generated from cURL: curl -X GET \"https://json-dataset-api-somw.onrender.com/api/dataset/employees/query?sortBy=salary&order=desc\""
+      },
+      "response": []
+    },
+    {
+      "name": "insert different JSON structure",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"product\":\"Laptop\",\"price\":75000,\"category\":\"Electronics\",\"inStock\":true}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://json-dataset-api-somw.onrender.com/api/dataset/products/record",
+          "protocol": "https",
+          "host": [
+            "json-dataset-api-somw",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "dataset",
+            "products",
+            "record"
+          ]
+        },
+        "description": "Generated from cURL: curl -X POST \"https://json-dataset-api-somw.onrender.com/api/dataset/products/record\" \\\n-H \"Content-Type: application/json\" \\\n-d \"{\\\"product\\\":\\\"Laptop\\\",\\\"price\\\":75000,\\\"category\\\":\\\"Electronics\\\",\\\"inStock\\\":true}\""
+      },
+      "response": []
+    },
+    {
+      "name": "Retrieve",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://json-dataset-api-somw.onrender.com/api/dataset/products/query",
+          "protocol": "https",
+          "host": [
+            "json-dataset-api-somw",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "dataset",
+            "products",
+            "query"
+          ]
+        },
+        "description": "Generated from cURL: curl -X GET \"https://json-dataset-api-somw.onrender.com/api/dataset/products/query\""
+      },
+      "response": []
+    }
+  ]
+}
