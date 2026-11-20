@@ -1,17 +1,27 @@
 
 # JSON Dataset API
 
-A Spring Boot REST API for storing and querying dynamic JSON datasets using PostgreSQL JSONB.
+A Spring Boot REST API for storing, retrieving, grouping, and sorting dynamic JSON datasets using PostgreSQL JSONB.
+
+## Live Application
+
+**Application URL:** https://json-dataset-api-somw.onrender.com
+
+**Swagger Documentation:** https://json-dataset-api-somw.onrender.com/swagger-ui/index.html
+
+The application is deployed on Render and uses a hosted PostgreSQL database.
 
 ## Overview
 
-The application allows clients to:
-- Insert JSON records into a named dataset.
-- Retrieve all records from a dataset.
+The JSON Dataset API allows clients to:
+
+- Insert dynamic JSON records into named datasets.
+- Retrieve all records belonging to a dataset.
 - Group records by a specified JSON field.
 - Sort records by a specified JSON field in ascending or descending order.
+- Store records with different JSON structures in a shared PostgreSQL table.
 
-All datasets share a common relational database table, while JSONB provides flexible storage for records with different structures.
+PostgreSQL JSONB provides flexible JSON storage while maintaining relational database capabilities.
 
 ## Technology Stack
 
@@ -19,74 +29,41 @@ All datasets share a common relational database table, while JSONB provides flex
 - Spring Boot 3.5.16
 - Spring Data JPA
 - PostgreSQL
-- JSONB
+- PostgreSQL JSONB
 - Maven
 - JUnit 5
 - Mockito
+- MockMvc
 - Springdoc OpenAPI / Swagger
+- Docker
+- Render
 
 ## Architecture
 
-The application follows a layered architecture:
+The application follows a layered architecture.
 
-- Controller: Handles HTTP requests and responses.
-- Service: Implements insertion, grouping and sorting logic.
-- Repository: Handles database operations.
-- Entity: Maps dataset records to the database.
-- DTO: Defines API response structures.
-- Validation: Validates dataset names and query parameters.
-- Exception: Centralizes API error handling.
+| Layer | Responsibility |
+|---|---|
+| Controller | Handles HTTP requests and responses |
+| Service | Implements record insertion, grouping, and sorting logic |
+| Repository | Handles database operations using Spring Data JPA |
+| Entity | Maps dataset records to database tables |
+| DTO | Defines API request and response structures |
+| Validation | Validates dataset names and query parameters |
+| Exception Handling | Centralizes API error handling |
 
-## Database Configuration
+### Database Design
 
-Create a PostgreSQL database:
+All datasets share a common PostgreSQL table named `dataset_records`.
 
-```sql
-CREATE DATABASE json_dataset_db;
-```
+| Column | Description |
+|---|---|
+| id | Unique record identifier |
+| dataset_name | Name of the dataset |
+| record_data | JSON record stored as JSONB |
+| created_at | Record creation timestamp |
 
-Configure `src/main/resources/application.properties`:
-
-```properties
-spring.application.name=json-dataset-api
-
-spring.datasource.url=jdbc:postgresql://localhost:5432/json_dataset_db
-spring.datasource.username=postgres
-spring.datasource.password=YOUR_PASSWORD
-
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-```
-
-Replace `YOUR_PASSWORD` with your local PostgreSQL password.
-
-## Run the Application
-
-Clone the repository:
-
-```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
-cd json-dataset-api
-```
-
-Build the application:
-
-```bash
-mvn clean install
-```
-
-Run the application:
-
-```bash
-mvn spring-boot:run
-```
-
-Application URL:
-
-```text
-http://localhost:8080
-```
+An index on `dataset_name` supports efficient dataset retrieval.
 
 ## API Endpoints
 
@@ -94,9 +71,7 @@ http://localhost:8080
 
 **POST**
 
-```text
-/api/dataset/{datasetName}/record
-```
+`/api/dataset/{datasetName}/record`
 
 Example request:
 
@@ -115,68 +90,168 @@ Success response: `201 Created`
 
 **GET**
 
-```text
-/api/dataset/employees/query
-```
+`/api/dataset/employees/query`
 
-Returns all records belonging to the employees dataset.
+Returns all records belonging to the specified dataset.
 
 ### 3. Group Records
 
 **GET**
 
-```text
-/api/dataset/employees/query?groupBy=department
-```
+`/api/dataset/employees/query?groupBy=department`
 
-Groups records based on the department field.
+Groups records based on the specified JSON field.
 
 ### 4. Sort Records
 
 Ascending:
 
-```text
-/api/dataset/employees/query?sortBy=age&order=asc
-```
+`/api/dataset/employees/query?sortBy=age&order=asc`
 
 Descending:
 
-```text
-/api/dataset/employees/query?sortBy=salary&order=desc
-```
+`/api/dataset/employees/query?sortBy=salary&order=desc`
 
 ### Query Rules
 
 - `groupBy` and `sortBy` cannot be used together.
-- Sort order supports `asc` and `desc`.
-- If neither parameter is provided, all records are returned.
-- Sorting supports numeric, string and boolean values.
-- Missing and null values are placed last when sorting.
-- Dataset names must start with a letter and contain only letters, numbers, hyphens or underscores.
+- Sorting supports `asc` and `desc`.
+- Without query parameters, all dataset records are returned.
+- Numeric, string, and boolean values are supported for sorting.
+- Missing and null values are placed last during sorting.
+- Dataset names must start with a letter and contain only letters, numbers, hyphens, or underscores.
+
+## Root Endpoint
+
+**GET /**
+
+Returns application information and its current running status.
+
+Example response:
+
+```json
+{
+  "application": "JSON Dataset API",
+  "status": "Running",
+  "message": "API for storing, grouping and sorting JSON records.",
+  "documentation": "/swagger-ui/index.html"
+}
+```
 
 ## Swagger Documentation
 
-Once the application is running, access:
+Interactive API documentation is available at:
 
-```text
-http://localhost:8080/swagger-ui/index.html
+https://json-dataset-api-somw.onrender.com/swagger-ui/index.html
+
+Swagger allows users to explore endpoints, provide request parameters, execute API requests, and inspect responses.
+
+## Local Setup
+
+### Prerequisites
+
+- Java 17
+- Maven
+- PostgreSQL
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Sanskar3008/json-dataset-api.git
 ```
 
-## Run Tests
+Navigate to the Spring Boot application directory:
 
-Execute all automated tests:
+```bash
+cd json-dataset-api/json-dataset-api
+```
+
+### 2. Configure PostgreSQL
+
+Create a PostgreSQL database:
+
+```sql
+CREATE DATABASE json_dataset_db;
+```
+
+Create a local configuration file:
+
+`src/main/resources/application-local.properties`
+
+Add your local database configuration:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/json_dataset_db
+spring.datasource.username=postgres
+spring.datasource.password=YOUR_PASSWORD
+```
+
+Replace `YOUR_PASSWORD` with your local PostgreSQL password.
+
+**Note:** Keep your local credentials private. Do not commit `application-local.properties` to GitHub.
+
+### 3. Build the Application
+
+```bash
+mvn clean install
+```
+
+### 4. Run the Application
+
+```bash
+mvn spring-boot:run
+```
+
+Activate the `local` Spring profile in your IDE using:
+
+```text
+--spring.profiles.active=local
+```
+
+The application runs at:
+
+http://localhost:8080
+
+Swagger documentation:
+
+http://localhost:8080/swagger-ui/index.html
+
+## Running Tests
+
+Execute the automated tests using:
 
 ```bash
 mvn clean test
 ```
 
-The project includes unit and controller tests using JUnit 5, Mockito and MockMvc.
+The project includes unit and controller tests using JUnit 5, Mockito, and MockMvc.
+
+## Deployment
+
+The application is deployed using Docker on Render.
+
+- Java 17 Docker build and runtime images.
+- PostgreSQL hosted database.
+- Environment-based database configuration.
+- Automatic deployment from the GitHub main branch.
+
+The following environment variables are configured in Render:
+
+- `SPRING_DATASOURCE_URL`
+- `SPRING_DATASOURCE_USERNAME`
+- `SPRING_DATASOURCE_PASSWORD`
+
+Database credentials are managed through Render environment variables and are not stored in the source code.
 
 ## Error Handling
 
-The API provides consistent error responses for:
-- Invalid request parameters: `400 Bad Request`
-- Invalid JSON request bodies: `400 Bad Request`
-- Unknown endpoints: `404 Not Found`
-- Unexpected server errors: `500 Internal Server Error`
+The application provides centralized error handling for:
 
+- Invalid request parameters — `400 Bad Request`
+- Invalid JSON request bodies — `400 Bad Request`
+- Unknown endpoints — `404 Not Found`
+- Unexpected server errors — `500 Internal Server Error`
+
+## Repository
+
+GitHub: https://github.com/Sanskar3008/json-dataset-api
